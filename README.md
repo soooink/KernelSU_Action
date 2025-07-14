@@ -1,210 +1,263 @@
-**中文** | [English](README_EN.md)
+# Kernel Build Action For Lancelot & Merlin
 
-# KernelSU Action
+## Step-by-step guide to use
+<details>
+  <summary><i>Click to open</i></summary>
 
-用于 Non-GKI Kernel 的 Action，具有一定的普遍性，需要了解内核及 Android 的相关知识得以运用。
+>### 1.
+>![01](guide/images/01.png)
 
-## 警告 :warning: :warning: :warning:
+>### 2.
+>![02](guide/images/02.png)
+> **Note:** Unselect `Copy the kernel-tree_lancelot branch only` if you are building for merlin.
 
-如果你不是内核作者，使用他人的劳动成果构建 KernelSU，请仅供自己使用，不要分享给别人，这是对原作者的劳动成果的尊重。
+>### 3.
+>![03](guide/images/03.png)
 
-## 支持内核
+>### 4.
+>![04](guide/images/04.png)
 
-- `5.4`
-- `4.19`
-- `4.14`
-- `4.9`
+>### 5.
+>![05](guide/images/05.png)
 
-## 使用
+>### 6.
+>![06](guide/images/06.png)
 
-> 所有 config.env 内的变量均只判断`true`
+>### 7.
+>![07](guide/images/07.png)
 
-> 编译成功后，会在`Action`上传 AnyKernel3，已经关闭设备检查，请在 Twrp 刷入。
+>### 8.
+>![08](guide/images/08.png)
 
-Fork 本仓库到你的储存库然后按照以下内容编辑 config.env，之后点击`Star`或`Action`，在左侧可看见`Build Kernel`选项，点击选项会看见右边的大对话框的上面会有`Run workflows`点击它会启动构建。
+>### 9.
+>![09](guide/images/09.png)
 
-### Kernel Source
+>### 10.
+>![10](guide/images/10.png)
 
-修改为你的内核仓库地址
+>### 11.
+>![11](guide/images/11.png)
+> **Note:** Reload this page if the yellow circle does not appear.
 
-例如: https://github.com/Diva-Room/Miku_kernel_xiaomi_wayne
+>### 12.
+>![12](guide/images/12.png)
 
-### Kernel Source Branch
+>### 13.
+>![13](guide/images/13.png)
 
-修改为你的内核分支
+>### 14.
+>![14](guide/images/14.png)
+  
+</details>
+<br>
 
-例如: TDA
+## Options Guide
+> All options are located in [config.env](config.env)
 
-### Kernel Config
+### KERNEL_SOURCE
 
-修改为你的内核配置文件名
+Change this to your kernel repository link.
 
-例如: vendor/wayne_defconfig
+For example: `https://github.com/Jbub5/android_kernel_xiaomi_mt6768`
 
-### Arch
+### KERNEL_SOURCE_BRANCH
 
-例如: arm64
+Change this to your kernel branch.
 
-### Kernel Image Name
+For example: `kernel-tree`
 
-修改为需要刷写的 kernel binary，一般与你的 aosp-device tree 里的 BOARD_KERNEL_IMAGE_NAME 是一致的
+### KERNEL_CONFIG
 
-例如: Image.gz-dtb
+Change this to your kernel defconfig name.
 
-常见还有 Image、Image.gz
+For example: `lancelot_defconfig`
 
-### Clang
+### KERNEL_IMAGE_NAME
 
-#### Use custom clang
+Change this to the kernel binary that needs to be flashed, generally consistent with `BOARD_KERNEL_IMAGE_NAME` in your AOSP device tree.
 
-可以使用除 google 官方的 clang，如[proton-clang](https://github.com/kdrag0n/proton-clang)
+For example: `Image.gz-dtb`
 
-#### Custom Clang Source
+Common names include `Image`, `Image.gz`.
 
-> 如果是 git 仓库，请填写包含`.git`的链接
+### KERNEL_ARCH
 
-支持 git 仓库或者 zip 压缩包的直链
-
-#### Custom cmds
-
-都用自定义 clang 了，自己改改这些配置应该都会吧 :)
-
-#### Clang Branch
-
-由于 [#23](https://github.com/xiaoleGun/KernelSU_Action/issues/23) 的需要，我们提供可自定义 Google 上游分支的选项，主要的有分支有
-| Clang 分支 |
-| ---------- |
-| master |
-| master-kernel-build-2021 |
-| master-kernel-build-2022 |
-
-或者其它分支，请根据自己的需求在 https://android.googlesource.com/platform/prebuilts/clang/host/linux-x86 中寻找
-
-#### Clang version
-
-填写需要使用的 Clang 版本
-| Clang 版本 | 对应 Android 版本 | AOSP-Clang 版本 |
-| ---------- | ----------------- | --------------- |
-| 12.0.5 | Android S | r416183b |
-| 14.0.6 | Android T | r450784d |
-| 14.0.7 |               | r450784e |
-| 15.0.1 |               | r458507 |
-| 17.0.1 |               | r487747b |
-| 17.0.2 | Android U | r487747c |
+For example: `arm64`
 
 
-一般 Clang12 就能通过大部分 4.14 及以上的内核的编译
-我自己的 MI 6X 4.19 使用的是 r450784d
+### ENABLE_KERNELSU
 
-### GCC
+Enable [KernelSU](https://kernelsu.org/guide/what-is-kernelsu.html) support.
 
-#### Enable GCC 64
+#### KERNELSU_TAG
 
-启用 GCC 64 交叉编译
+[KernelSU 1.0 no longer supports non-GKI kernels](https://github.com/tiann/KernelSU/issues/1705). The last supported version is [v0.9.5](https://github.com/tiann/KernelSU/tree/v0.9.5), please make sure to use the correct branch.
 
-#### Enable GCC 32
+Select the branch or tag of KernelSU:
 
-启用 GCC 32 交叉编译
+- ~~main branch (development version): `KERNELSU_TAG=main`~~
+- Latest TAG (stable version): `KERNELSU_TAG=v0.9.5`
+- Specify the TAG (such as `v0.5.2`): `KERNELSU_TAG=v0.5.2`
 
-### Extra cmds
+#### KSU_EXPECTED_SIZE and KSU_EXPECTED_HASH
 
-有的内核需要加入一些其它编译命令，才能正常编译，一般不需要其它的命令，请自行搜索自己内核的资料
-请在命令与命令之间用空格隔开
-
-例如: LLVM=1 LLVM_IAS=1
-
-### Enable KernelSU
-
-启用 KernelSU，用于排查内核故障或单独编译内核
-
-#### KernelSU Branch or Tag
-
-[KernelSU 1.0 已经不再支持非 GKI 内核](https://github.com/tiann/KernelSU/issues/1705)，最后的支持版本为 [v0.9.5](https://github.com/tiann/KernelSU/tree/v0.9.5)，请注意使用正确的分支
-
-选择 KernelSU 的分支或 tag:
-
-- ~~main 分支(开发版): `KERNELSU_TAG=main`~~
-- 最新 TAG(稳定版): `KERNELSU_TAG=v0.9.5`
-- 指定 TAG(如`v0.5.2`): `KERNELSU_TAG=v0.5.2`
-
-#### KernelSU Manager signature size and hash
-
-自定义KernelSU管理器签名的size值和hash值，如果不需要自定义管理器则请留空或填入官方默认值：
+Customize the size and hash values of the KernelSU manager signature, if you don't need to customize the manager then please leave them empty or fill in the official default values:
 
 `KSU_EXPECTED_SIZE=0x033b`
 
 `KSU_EXPECTED_HASH=c371061b19d8c7d7d6133c6a9bafe198fa944e50c1b31c9d8daa8d7f1fc2d2d6`
 
-可键入`ksud debug get-sign <apk_path>`获取apk签名的size值和hash值
+You can type `ksud debug get-sign <apk_path>` to get the size and hash of the apk signature.
 
-### Disable LTO
+#### KSU_REVERT
 
-LTO 用于优化内核，但有些时候会导致错误
+This will revert the [commit](https://github.com/tiann/KernelSU/commit/898e9d4f8ca9b2f46b0c6b36b80a872b5b88d899) that removed non-GKI support, making it possible to continue using [official KernelSU](https://kernelsu.org/guide/what-is-kernelsu.html) up to version [1.0.1](https://github.com/tiann/KernelSU/releases/tag/v1.0.1). Using versions newer than [1.0.1](https://github.com/tiann/KernelSU/releases/tag/v1.0.1) is not possible due to the removal of non-GKI support from the manager.
 
-### Disable CC_WERROR
+#### ADD_KPROBES_CONFIG
 
-用于修复某些不支持或关闭了Kprobes的内核，修复KernelSU未检测到开启Kprobes的变量抛出警告导致错误
+This is used in the installation of [KernelSU](https://kernelsu.org/guide/what-is-kernelsu.html) via kprobe. If kprobe is broken in your kernel or you don't know what it is then don't touch this config.
 
-### Add Kprobes Config
+See details: https://kernelsu.org/guide/how-to-integrate-for-non-gki.html#integrate-with-kprobe
 
-自动在 defconfig 注入参数
+#### KSU_HOOKS_PATCH
 
-### Add overlayfs Config
+If kprobe does not work in your kernel, then try enabling this option, this will automatically patch kernel source code to support [KernelSU](https://kernelsu.org/guide/what-is-kernelsu.html).
 
-此参数为 KernelSU 模块和 system 分区读写提供支持
-自动在 defconfig 注入参数
+See details: https://kernelsu.org/guide/how-to-integrate-for-non-gki.html#manually-modify-the-kernel-source
 
-### Apply KernelSU Patch
+### ADD_OVERLAYFS_CONFIG
 
-如果 kprobe 工作不正常（通常是上游的 bug 或者内核版本过低），那你可以尝试启用此参数
+If enabled will automatically put the configs needed for OverlayFS into your defconfig.
 
-自动修改内核源码以支持 KernelSU  
-参见：[如何为非GKI设备集成 KernelSU](https://kernelsu.org/zh_CN/guide/how-to-integrate-for-non-gki.html#modify-kernel-source-code)
+### ADD_APATCH_SUPPORT
 
-### Remove unused packages
+If enabled will automatically put the configs needed for [APatch](https://apatch.dev/what-is-apatch.html) into your defconfig.
 
-清理无用的包，以获得更大的磁盘空间
+#### FIX_APATCH_OPENELA
 
-如果你需要这些包，请关闭此项
+This option provides fix for https://github.com/bmax121/APatch/issues/400.
 
-### AnyKernel3
+### OLD_ANDROID_SUPPORT
 
-#### Use custom AnyKernel3
+> There is no official support for older Android and MIUI, and bug reports will not be accepted on them.
 
-可以使用自定义的 AnyKernel3
+This option provides support for MIUI 12.5 and custom ROMs based on Android 11 through 12, but breaks support for Android 13 and above.
 
-#### Custom AnyKernel3 Source
 
-> 如果是 git 仓库，请填写包含`.git`的链接
+### USE_CUSTOM_CLANG
 
-支持 git 仓库或者 zip 压缩包的直链
+You can use a non-official clang such as [proton-clang](https://github.com/kdrag0n/proton-clang).
 
-#### AnyKernel3 Branch
+#### CUSTOM_CLANG_SOURCE
 
-自定义 AnyKernel3 的仓库分支
+> Fill in a link that includes `.git` if it is a git repository.
 
-### Enable ccache
+Git repository or direct chain of compressed zip files is supported.
 
-启用缓存，让第二次编译内核更快，最少可以减少 2/5 的时间
+#### CUSTOM_CLANG_BRANCH
 
-### Need DTBO
+For example: `main`
 
-上传 DTBO
-部分设备需要
 
-### Build Boot IMG
+### CLANG_BRANCH
 
-> 从之前的 Workflows 合并进来的，可以查看历史提交
+Due to [#23](https://github.com/xiaoleGun/KernelSU_Action/issues/23), we provide an option to customize the Google main branch. The main ones include:
+| Clang Branch |
+| ------------ |
+| master |
+| master-kernel-build-2021 |
+| master-kernel-build-2022 |
 
-编译 boot.img，需要你提供`Source boot image`
+Or other branches, please search for them according to your own needs at https://android.googlesource.com/platform/prebuilts/clang/host/linux-x86.
 
-### Source Boot Image
+#### CLANG_VERSION
 
-故名思义，提供一个源系统可以正常开机的 boot 镜像，需要直链，最好是同一套内核源码以及与你当前系统同一套设备树从 aosp 构建出来的。ramdisk 里面包含分区表以及 init，没有的话构建出来的镜像会无法正常引导。
+Enter the Clang version to use.
 
-例如: https://raw.githubusercontent.com/xiaoleGun/KernelSU_action/main/boot/boot-wayne-from-Miku-UI-latest.img
+| Clang Version | Corresponding Android Version | AOSP-Clang Version |
+| ------------- | ----------------------------- | ------------------ |
+| 12.0.5        | Android S                     | r416183b           |
+| 14.0.6        | Android T                     | r450784d           |
+| 14.0.7        |                               | r450784e           |
+| 15.0.1        |                               | r458507            |
+| 17.0.1        |                               | r487747b           |
+| 17.0.2        | Android U                     | r487747c           |
 
-## 感谢
+Generally, Clang12 can compile most of the 4.14 and above kernels. My MI 6X 4.19 uses r450784d.
+
+### ENABLE_GCC_AOSP
+Enables usage of standart GCC toolchain.
+
+#### ENABLE_GCC_ARM64
+
+Enable GCC 64C cross-compiler.
+
+#### ENABLE_GCC_ARM32
+
+Enable GCC 32C cross-compiler.
+
+
+### EXTRA_CMDS
+
+Some kernels require additional compilation commands to compile correctly. Generally, no other commands are needed, so please search for information about your kernel. Please separate the command and the command with a space.
+
+For example: `LLVM=1 LLVM_IAS=1`
+
+
+### USE_CUSTOM_ANYKERNEL3
+
+Can use custom AnyKernel3.
+
+#### CUSTOM_ANYKERNEL3_SOURCE
+
+> If it is a git repository, please fill in the link containing `.git`
+
+Supports direct links to git repositories or zip compressed packages.
+
+#### CUSTOM_ANYKERNEL3_BRANCH
+
+Customize the warehouse branch of AnyKernel3.
+
+
+### NEED_DTBO
+
+Upload DTBO. Some devices require it.
+
+### BUILD_BOOT_IMG
+
+> Added from previous workflows, view historical commits
+
+Build boot.img, and you need to provide a `Source boot image`.
+
+### SOURCE_BOOT_IMAGE
+
+As the name suggests, it provides a boot image source system that can boot normally and requires a direct chain, preferably from the same kernel source and AOSP device tree as your current system. Ramdisk contains the partition table and init, without which the compiled image will not boot up properly.
+
+For example: `https://raw.githubusercontent.com/xiaoleGun/KernelSU_action/main/boot/boot-wayne-from-Miku-UI-latest.img`
+
+
+### DISABLE_LTO
+
+LTO is used to optimize the kernel but sometimes causes errors.
+
+### DISABLE_CC_WERROR
+
+Sometimes even a harmless warning breaks the build.
+
+### FIX_WIFI_SPEED
+
+Switching to other drivers fixed spontaneous reboots when turning on Wi-Fi on some devices, but resulted in decreased network speeds. This option will revert to the previous drivers and thus fix the network speed.
+
+### REMOVE_UNUSED_PACKAGES
+
+To clean unnecessary packages and free up more disk space. If you need these packages, please disable this option.
+
+### ENABLE_CCACHE
+
+Enable the cache to make the second kernel compile faster (or slower).
+
+
+## Thanks
 
 - [AnyKernel3](https://github.com/osm0sis/AnyKernel3)
 - [AOSP](https://android.googlesource.com)
