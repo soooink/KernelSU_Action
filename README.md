@@ -1,4 +1,4 @@
-# Kernel Build Action For Lancelot & Merlin
+# Kernel Build Action For OnePlus SM8250 Devices
 
 ## Step-by-step guide to use
 <details>
